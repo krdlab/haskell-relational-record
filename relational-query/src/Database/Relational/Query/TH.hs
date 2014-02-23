@@ -55,7 +55,6 @@ module Database.Relational.Query.TH (
   defineProductConstructorInstance
   ) where
 
-import Data.Char (toUpper, toLower)
 import Data.List (foldl1')
 
 import Language.Haskell.TH
@@ -227,7 +226,7 @@ defineTableTypes derivationVar' tableVar' relVar' insVar' insQVar' recordType ta
   return $ iDs ++ dDs
 
 tableSQL :: String -> String -> String
-tableSQL schema table = map toUpper schema ++ '.' : map toLower table
+tableSQL schema table = schema ++ '.' : table
 
 derivationVarNameDefault :: String -> VarName
 derivationVarNameDefault =  (`varNameWithPrefix` "derivationFrom")
