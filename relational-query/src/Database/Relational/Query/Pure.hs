@@ -148,17 +148,20 @@ constantTimeTerms :: FormatTime t => Keyword -> String -> t -> [StringSQL]
 constantTimeTerms kw fmt t = [mconcat [kw,
                                        stringExprSQL $ formatTime defaultTimeLocale fmt t]]
 
+constantTimeTermsForSqlite3 :: FormatTime t => Keyword -> String -> t -> [StringSQL]
+constantTimeTermsForSqlite3 kw fmt t = [stringExprSQL $ formatTime defaultTimeLocale fmt t]
+
 -- | Constant SQL terms of 'Day'.
 instance ShowConstantTermsSQL Day where
-  showConstantTermsSQL' = constantTimeTerms DATE "%Y-%m-%d"
+  showConstantTermsSQL' = constantTimeTermsForSqlite3 DATE "%Y-%m-%d"
 
 -- | Constant SQL terms of 'TimeOfDay'.
 instance ShowConstantTermsSQL TimeOfDay where
-  showConstantTermsSQL' = constantTimeTerms TIME "%H:%M:%S"
+  showConstantTermsSQL' = constantTimeTermsForSqlite3 TIME "%H:%M:%S"
 
 -- | Constant SQL terms of 'LocalTime'.
 instance ShowConstantTermsSQL LocalTime where
-  showConstantTermsSQL' = constantTimeTerms TIMESTAMP "%Y-%m-%d %H:%M:%S"
+  showConstantTermsSQL' = constantTimeTermsForSqlite3 TIMESTAMP "%Y-%m-%d %H:%M:%S"
 
 showMaybeTerms :: ShowConstantTermsSQL a => PersistableRecordWidth a -> Maybe a -> [StringSQL]
 showMaybeTerms wa = d  where
